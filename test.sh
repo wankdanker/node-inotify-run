@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FILE_PATH=$1
+FILE=$2
+EVENTS=$3
+
+echo FILE_PATH=$FILE_PATH;
+echo FILE=$FILE;
+echo EVENTS=$EVENTS;

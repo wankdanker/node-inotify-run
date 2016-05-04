@@ -1,0 +1,37 @@
+{
+  "name": "inotify-run",
+  "version": "1.0.0",
+  "description": "Run scripts on inotify events",
+  "main": "index.js",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "dank-fileemitter": "^0.1.2",
+    "debug": "^2.2.0",
+    "inotify": "^1.4.0",
+    "nan": "^2.3.3"
+  },
+  "devDependencies": {},
+  "bin" : {
+    "inotify-run" : "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wankdanker/node-inotify-run.git"
+  },
+  "keywords": [
+    "inotify",
+    "run",
+    "script",
+    "execute",
+    "watch"
+  ],
+  "author": "Dan VerWeire",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wankdanker/node-inotify-run/issues"
+  },
+  "homepage": "https://github.com/wankdanker/node-inotify-run#readme"
+}
