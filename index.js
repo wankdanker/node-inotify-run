@@ -6,10 +6,10 @@ var fileEmitter = require('dank-fileemitter');
 var join = require('path').join;
 var fs = require('fs');
 
-var program = require('./commander');
-var resolveEvents = require('./resolve-events');
-var orEvents = require('./or-events');
-var launch = require('./launch');
+var program = require('./lib/commander');
+var resolveEvents = require('./lib/resolve-events');
+var orEvents = require('./lib/or-events');
+var launch = require('./lib/launch');
 
 var watching = {};
 var inotify = new Inotify();
