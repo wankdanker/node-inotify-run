@@ -1,4 +1,4 @@
-#!/usr/bin/env nodejs
+#!/usr/bin/env node
 
 var debug = require('debug')('inotify-run')
 var Inotify = require('inotify').Inotify;
