@@ -31,12 +31,13 @@ $ inotify-run -d 1 -p /opt/images -e IN_CREATE,IN_DELETE /opt/bin/update-databas
 
   Options:
 
-    -h, --help           output usage information
-    -V, --version        output the version number
-    -p, --path <value>   Path to watch
-    -d, --depth <n>      How many directories deep should be watched.
-    -e, --events <list>  List of events to watch for; see below.
-
+    -h, --help                 output usage information
+    -V, --version              output the version number
+    -p, --path <value>         Path to watch
+    -d, --depth <n>            How many directories deep should be watched.
+    -e, --events <list>        List of events to watch for; see below.
+    -i, --include <glob-list>  List of directories to include, globstyle (minimatch)
+    -x, --exclude <glob-list>  List of directories to include, globstyle (minimatch)
 
   Debugging:
 

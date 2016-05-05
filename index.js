@@ -5,12 +5,12 @@ var Inotify = require('inotify').Inotify;
 var fileEmitter = require('dank-fileemitter');
 var join = require('path').join;
 var fs = require('fs');
-
 var program = require('./lib/commander');
 var resolveEvents = require('./lib/resolve-events');
 var orEvents = require('./lib/or-events');
 var launch = require('./lib/launch');
 var arrayMatch = require('./lib/array-match');
+var multiMatch = require('./lib/multi-match');
 
 var watching = {}; //for path lookups
 var watchers = {}; //for watch number instances
@@ -50,6 +50,8 @@ debug('cmd', program.cmd);
 debug('events', program.events);
 debug('path', program.path);
 debug('depth', program.depth, typeof(program.depth));
+debug('include', program.include);
+debug('exclude', program.exclude);
 
 watchDeep(program.path, program.events, program.depth);
 
@@ -72,6 +74,22 @@ function watchDeep(path, events, depth) {
 function watchPath(path, events, depth) {
   //avoid watching paths multiple times
   if (watching[path]) {
+    return;
+  }
+
+  //if program.include is specified then we will only include paths that match
+  //the include globs. So, if the path does NOT match any of the  globs then
+  //we will bail early
+  if (program.include && !multiMatch(path, program.include) && path !== program.path) {
+    debug('not watching - path does not match include glob: %s', path);
+    return;
+  }
+
+  //if program.exclude is specified then we will not watch any paths that match
+  //the exclude globs. So, if the path DOES match any of the globs then we will
+  //bail early.
+  if (program.exclude && multiMatch(path, program.exclude)) {
+    debug('not watching - path matches exclude glob: %s', path);
     return;
   }
 
