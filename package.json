@@ -7,7 +7,7 @@
     "commander": "^2.9.0",
     "dank-fileemitter": "^0.1.2",
     "debug": "^2.2.0",
-    "inotify": "^1.4.0",
+    "inotify": "git+https://github.com/wankdanker/node-inotify.git",
     "nan": "^2.3.3"
   },
   "devDependencies": {},
