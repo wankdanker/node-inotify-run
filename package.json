@@ -1,6 +1,6 @@
 {
   "name": "inotify-run",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Run scripts on inotify events",
   "main": "index.js",
   "dependencies": {
