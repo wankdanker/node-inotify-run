@@ -10,8 +10,10 @@ var program = require('./lib/commander');
 var resolveEvents = require('./lib/resolve-events');
 var orEvents = require('./lib/or-events');
 var launch = require('./lib/launch');
+var arrayMatch = require('./lib/array-match');
 
-var watching = {};
+var watching = {}; //for path lookups
+var watchers = {}; //for watch number instances
 var inotify = new Inotify();
 
 if (!program.cmd) {
@@ -75,12 +77,17 @@ function watchPath(path, events, depth) {
 
   var args = {
     path : path
-    , watch_for : orEvents(events)
+    , watch_for : orEvents('IN_CREATE', 'IN_DELETE', events)
     , callback : function (event) {
-      event.path = path;
-      event.depth = depth;
-      event.file = join(path, event.name);
-      event.watchedEvents = events;
+      //this closure can not be trusted, we need to obtain the path, events
+      //and depth from locally stored objects based on the event.watch number
+      var wd = watchers[event.watch];
+      debug(wd, 'wd');
+      debug(event);
+      event.path = wd.path;
+      event.depth = wd.depth;
+      event.file = join(wd.path, event.name || "");
+      event.watchedEvents = wd.events;
 
       onEvent(event);
     }
@@ -88,7 +95,16 @@ function watchPath(path, events, depth) {
 
   debug(args);
 
-  watching[path] = inotify.addWatch(args);
+  var wd = inotify.addWatch(args);
+
+  //scope is lost when calling back so, we have to keep
+  //track of some of things we need based on the wd number
+  //returned from addWatch()
+  watching[path] = watchers[wd] = {
+    path : path
+    , events : events
+    , depth : depth
+  };
 }
 
 function onEvent (event) {
@@ -102,11 +118,19 @@ function onEvent (event) {
 
     event.stat = stat;
 
-    if (event.stat.isDirectory() && event.depth) {
+    if (event.stat && event.stat.isDirectory() && event.depth) {
       watchDeep(event.file, event.watchedEvents, event.depth);
     }
 
+    //TODO: remove watch for deleted dir
+
     debug(event);
+
+    //if the events that occured on this event are not in the watchedEvents
+    //array then we will bail early and not launch
+    if (!arrayMatch(event.events, event.watchedEvents)) {
+      return;
+    }
 
     launch({
       event : event
